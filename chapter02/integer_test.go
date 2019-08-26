@@ -7,7 +7,7 @@ import (
 )
 
 func TestChapter02(t *testing.T) {
-	assertMessage := func(t *testing.T, result, expected int) {
+	assertEqual := func(t *testing.T, result, expected int) {
 		t.Helper()
 		if result != expected {
 			t.Errorf("result: %q , expected: %q", result, expected)
@@ -18,6 +18,6 @@ func TestChapter02(t *testing.T) {
 		result := integer.Add(1, 2)
 		expected := 3
 
-		assertMessage(t, result, expected)
+		assertEqual(t, result, expected)
 	})
 }
