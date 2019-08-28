@@ -1,55 +1,44 @@
 package shape_test
 
 import (
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	"github.com/nsiregar/solid-go/chapter05"
 )
 
-type Polygon interface {
-	Area() float64
-}
+var _ = Describe("Shape", func() {
+	Describe("#Perimeter", func() {
+		It("calculate rectangle perimeter", func() {
+			rectangle := shape.Rectangle{
+				Width:  10.0,
+				Height: 10.0,
+			}
 
-func TestChapter05Perimeter(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected float64) {
-		t.Helper()
+			result := rectangle.Perimeter()
+			expected := 40.0
 
-		if result != expected {
-			t.Errorf("result: %.2f , expected: %.2f", result, expected)
-		}
-	}
-
-	t.Run("calculate rectangle perimeter", func(t *testing.T) {
-		rectangle := shape.Rectangle{
-			Width:  10.0,
-			Height: 10.0,
-		}
-
-		result := rectangle.Perimeter()
-		expected := 40.0
-
-		assertEqual(t, result, expected)
+			Expect(result).To(Equal(expected))
+		})
 	})
-}
 
-func TestChapter05Area(t *testing.T) {
-	areaTests := []struct {
-		name    string
-		polygon Polygon
-		area    float64
-	}{
-		{name: "Rectangle", polygon: shape.Rectangle{Width: 10.0, Height: 10.0}, area: 100.0},
-		{name: "Circle", polygon: shape.Circle{Radius: 10.0}, area: 314.1592653589793},
-		{name: "Triangle", polygon: shape.Triangle{Base: 12.0, Height: 6.0}, area: 36.0},
-	}
+	Describe("#Area", func() {
+		It("calculate shape area", func() {
+			areaTests := []struct {
+				name  string
+				shape shape.Shape
+				area  float64
+			}{
+				{name: "Rectangle", shape: shape.Rectangle{Width: 10.0, Height: 10.0}, area: 100.0},
+				{name: "Circle", shape: shape.Circle{Radius: 10.0}, area: 314.1592653589793},
+				{name: "Triangle", shape: shape.Triangle{Base: 12.0, Height: 6.0}, area: 36.0},
+			}
 
-	for _, tt := range areaTests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := tt.polygon.Area()
+			for _, tt := range areaTests {
+				result := tt.shape.Area()
 
-			if result != tt.area {
-				t.Errorf("result: %.2f , expected: %.2f", result, tt.area)
+				Expect(result).To(Equal(tt.area))
 			}
 		})
-	}
-}
+	})
+})

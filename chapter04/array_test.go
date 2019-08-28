@@ -1,74 +1,55 @@
 package array_test
 
 import (
-	"reflect"
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	"github.com/nsiregar/solid-go/chapter04"
 )
 
-func TestChapter04(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected int) {
-		t.Helper()
-		if result != expected {
-			t.Errorf("result: %q , expected: %q", result, expected)
-		}
-	}
+var _ = Describe("Array", func() {
+	Describe("#Sum", func() {
+		It("summarize array of 5 integers", func() {
+			numbers := []int{1, 2, 3, 4, 5}
 
-	t.Run("summarize array of 5 integers", func(t *testing.T) {
-		numbers := []int{1, 2, 3, 4, 5}
+			result := array.Sum(numbers)
+			expected := 15
 
-		result := array.Sum(numbers)
-		expected := 15
+			Expect(result).To(Equal(expected))
+		})
 
-		assertEqual(t, result, expected)
+		It("summarize array of n integers", func() {
+			numbers := []int{1, 2, 3}
+
+			result := array.Sum(numbers)
+			expected := 6
+
+			Expect(result).To(Equal(expected))
+		})
 	})
 
-	t.Run("summarize array of any size integers", func(t *testing.T) {
-		numbers := []int{1, 2, 3}
+	Describe("#SumAll", func() {
+		It("process array with #Sum", func() {
+			result := array.SumAll([]int{1, 2}, []int{3, 4})
+			expected := []int{3, 7}
 
-		result := array.Sum(numbers)
-		expected := 6
-
-		assertEqual(t, result, expected)
-	})
-}
-
-func TestChapter04PartTwo(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected []int) {
-		t.Helper()
-		if !reflect.DeepEqual(result, expected) {
-			t.Errorf("result: %v , expected: %v", result, expected)
-		}
-	}
-
-	t.Run("sumAll array", func(t *testing.T) {
-		result := array.SumAll([]int{1, 2}, []int{3, 4})
-		expected := []int{3, 7}
-
-		assertEqual(t, result, expected)
-	})
-}
-
-func TestChapter04PartThree(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected []int) {
-		t.Helper()
-		if !reflect.DeepEqual(result, expected) {
-			t.Errorf("result: %v , expected: %v", result, expected)
-		}
-	}
-
-	t.Run("sumAllTails sum some slice of array", func(t *testing.T) {
-		result := array.SumAllTails([]int{1, 2}, []int{3, 4})
-		expected := []int{2, 4}
-
-		assertEqual(t, result, expected)
+			Expect(result).To(Equal(expected))
+		})
 	})
 
-	t.Run("sumAllTails sum some slice of empty array", func(t *testing.T) {
-		result := array.SumAllTails([]int{}, []int{3, 4})
-		expected := []int{0, 4}
+	Describe("#SumAllTails", func() {
+		It("sum slice of array", func() {
+			result := array.SumAllTails([]int{1, 2}, []int{3, 4})
+			expected := []int{2, 4}
 
-		assertEqual(t, result, expected)
+			Expect(result).To(Equal(expected))
+		})
+
+		It("works on empty array", func() {
+			result := array.SumAllTails([]int{}, []int{3, 4})
+			expected := []int{0, 4}
+
+			Expect(result).To(Equal(expected))
+		})
 	})
-}
+})

@@ -1,56 +1,48 @@
 package wallet_test
 
 import (
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	"github.com/nsiregar/solid-go/chapter06"
 )
 
-func TestChapter06Wallet(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected wallet.Bitcoin) {
-		t.Helper()
+var _ = Describe("Bitcoin Wallet", func() {
+	var (
+		ewallet wallet.Wallet
+	)
 
-		if result != expected {
-			t.Errorf("result: %s, expected: %s", result, expected)
-		}
-	}
-
-	t.Run("deposit", func(t *testing.T) {
-		ewallet := wallet.Wallet{}
-		amount := wallet.Bitcoin(10)
-
-		ewallet.Deposit(amount)
-
-		result := ewallet.Balance()
-		expected := amount
-
-		assertEqual(t, result, expected)
+	BeforeEach(func() {
+		ewallet = wallet.Wallet{}
 	})
 
-	t.Run("withdraw", func(t *testing.T) {
-		amount := wallet.Bitcoin(100)
-		ewallet := wallet.Wallet{}
+	Describe("#Deposit", func() {
+		It("increase total balance", func() {
+			ewallet.Deposit(wallet.Bitcoin(10))
 
-		ewallet.Deposit(amount)
-		ewallet.Withdraw(wallet.Bitcoin(10))
-
-		result := ewallet.Balance()
-		expected := wallet.Bitcoin(90)
-
-		assertEqual(t, result, expected)
+			Expect(ewallet.Balance()).To(Equal(wallet.Bitcoin(10)))
+		})
 	})
 
-	t.Run("Withdraw insufficient funds", func(t *testing.T) {
-		amount := wallet.Bitcoin(100)
-		ewallet := wallet.Wallet{}
+	Describe("#Withdraw", func() {
+		BeforeEach(func() {
+			ewallet.Deposit(wallet.Bitcoin(10))
+		})
 
-		ewallet.Deposit(amount)
-		err := ewallet.Withdraw(wallet.Bitcoin(1000))
+		Context("Sufficient funds", func() {
+			It("decrease total balance", func() {
+				ewallet.Withdraw(wallet.Bitcoin(5))
 
-		assertEqual(t, ewallet.Balance(), amount)
+				Expect(ewallet.Balance()).To(Equal(wallet.Bitcoin(5)))
+			})
+		})
 
-		if err == nil {
-			t.Error("should raise error, but do not get any")
-		}
+		Context("Insufficient funds", func() {
+			It("raise error", func() {
+				err := ewallet.Withdraw(wallet.Bitcoin(15))
+
+				Expect(err).To(HaveOccurred())
+			})
+		})
 	})
-}
+})

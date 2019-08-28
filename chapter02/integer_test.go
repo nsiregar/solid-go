@@ -1,23 +1,21 @@
 package integer_test
 
 import (
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	"github.com/nsiregar/solid-go/chapter02"
 )
 
-func TestChapter02(t *testing.T) {
-	assertEqual := func(t *testing.T, result, expected int) {
-		t.Helper()
-		if result != expected {
-			t.Errorf("result: %q , expected: %q", result, expected)
-		}
-	}
+var _ = Describe("Integer", func() {
+	Describe("Math operation", func() {
+		Context("addition", func() {
+			It("add two numbers", func() {
+				result := integer.Add(1, 2)
+				expected := 3
 
-	t.Run("add two number", func(t *testing.T) {
-		result := integer.Add(1, 2)
-		expected := 3
-
-		assertEqual(t, result, expected)
+				Expect(result).To(Equal(expected))
+			})
+		})
 	})
-}
+})
