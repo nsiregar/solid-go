@@ -1,4 +1,4 @@
-package wallet_test
+package dictionary_test
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestChapter06(t *testing.T) {
+func TestChapter07(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Wallet Test Suite")
+	RunSpecs(t, "Dictionary Test Suite")
 }
